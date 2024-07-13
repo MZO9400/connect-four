@@ -9,6 +9,13 @@ const useConnectFour = (color: Color) => {
   const [winner, setWinner] = useState<Color>(Color.NONE);
 
 
+  const reload = () => {
+    setGrid(Array.from({length: 7}, () => Array.from({length: 6}, () => Color.NONE)))
+    setTurn(color)
+    setWinner(Color.NONE)
+  }
+
+
   const checkWin = (column: number): Color => {
     let rowNumber: number = grid[column].findIndex(value => value === Color.NONE) - 1
 
@@ -82,7 +89,7 @@ const useConnectFour = (color: Color) => {
   }
 
 
-  return {grid, turn, click, winner}
+  return {grid, turn, click, winner, reload}
 }
 
 export default useConnectFour;
