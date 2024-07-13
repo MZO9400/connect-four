@@ -24,7 +24,6 @@ const getBestMove = (grid: Color[][], forPlayer: Color): number => {
 const minimax = (grid: Color[][], forPlayer: Color,  playerToMove: Color, depth: number = 0): MinMaxValue => {
     const winner = getWinner(grid)
     if (winner !== Color.NONE) {
-        console.log(grid, forPlayer, playerToMove, score(winner, playerToMove))
         return {score: score(winner, playerToMove), move: -1}
     }
 
