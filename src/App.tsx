@@ -1,28 +1,16 @@
 import React from 'react';
 import './App.css';
-import Column from './component/Column'
+import Grid from './component/Grid'
 import useGrid from './hooks/useGrid';
 import Color from './types/Color';
 
 export default function App() {
-  const {grid, turn, click, winner} = useGrid()
-
-  const onCellClick = (col: number) => {
-    if (turn == null) {
-      return;
-    }
-    click(col)
-  }
-
-  if (winner !== Color.NONE) {
-    console.log(`Winner is ${winner}`)
-  }
+  const {grid, turn, click, winner} = useGrid(Color.YELLOW)
 
   return (
-    <span className='h-screen flex justify-center items-center'>
-      {grid.map((row, i) => {
-        return <Column key={i} row={row} onCellClick={(column: number) => onCellClick(i)} />
-      })}
+    <span className='h-screen flex flex-col justify-center items-center'>
+      {winner !== Color.NONE && <div>Winner is {winner}</div>}
+      <Grid grid={grid} turn={turn} click={click} />
     </span>
   )
 }

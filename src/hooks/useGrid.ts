@@ -2,9 +2,9 @@ import { useState } from "react";
 import Color from "../types/Color";
 
 
-const useGrid = () => {
+const useGrid = (color: Color) => {
   const [grid, setGrid] = useState(Array.from({length: 7}, () => Array.from({length: 6}, () => Color.NONE)))
-  const [turn, setTurn] = useState<boolean | null>(false);
+  const [turn, setTurn] = useState<Color>(color);
   const [winner, setWinner] = useState<Color>(Color.NONE);
 
 
@@ -66,15 +66,21 @@ const useGrid = () => {
     }
     newGrid[col][rowNumber] = turn ? Color.YELLOW : Color.RED;
     setGrid(newGrid)
-    setTurn(!turn)
 
     const _winner: Color = checkWin(col);
 
+    const nextTurn = _winner !== Color.NONE ? 
+          Color.NONE : 
+          turn === Color.RED ? 
+                Color.YELLOW : 
+                Color.RED
+
     if (_winner !== Color.NONE) {
-      setTurn(null);
+      setTurn(Color.NONE);
       setWinner(_winner)
     }
 
+    setTurn(nextTurn)
   }
 
 
