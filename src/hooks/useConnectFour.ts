@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import Color from "../types/Color";
-import { getBestMove } from '../Player/AI'
 import { checkWin, getNextBoard } from "../Game/API";
 
 
@@ -49,10 +48,15 @@ const useConnectFour = (color: Color, withAI = true) => {
 
   useEffect(() => {
     if (withAI && turn === aiColor && winner === Color.NONE) {
-      const bestMove = getBestMove(grid, aiColor)
-      if (bestMove >= 0) {
-        click(bestMove)
-      }
+        const aiWorker = new Worker(new URL("../Player/AI.ts", import.meta.url))
+        aiWorker.postMessage({grid, aiColor})
+        aiWorker.onmessage = function (event) {
+          const bestMove = event.data
+          if (bestMove >= 0) {
+            click(bestMove)
+            aiWorker.terminate()
+          }
+        };
     }
   }, [grid, turn, aiColor, winner, withAI, click])
 
