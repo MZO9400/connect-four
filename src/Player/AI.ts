@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import { checkWin } from "../Game/API";
 import Color from "../types/Color";
 import { getNextBoard } from "../Game/API";
@@ -10,7 +11,12 @@ interface MinMaxValue {
 const MAX_DEPTH = 3
 
 
-export const getBestMove = (grid: Color[][], forPlayer: Color): number => {
+self.onmessage = function (event) {
+    const {grid, forPlayer} = event.data
+    self.postMessage(getBestMove(grid, forPlayer));
+  };
+
+const getBestMove = (grid: Color[][], forPlayer: Color): number => {
    return minimax(grid, forPlayer, forPlayer).move
 }
 
@@ -96,3 +102,6 @@ const getWinner = (grid: Color[][]): Color => {
     }
     return winner;
 }
+
+
+export {}
