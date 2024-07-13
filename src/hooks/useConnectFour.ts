@@ -7,6 +7,10 @@ const useConnectFour = (color: Color) => {
   const [grid, setGrid] = useState(Array.from({length: 7}, () => Array.from({length: 6}, () => Color.NONE)))
   const [turn, setTurn] = useState<Color>(color);
   const [winner, setWinner] = useState<Color>(Color.NONE);
+  const [winStats, setWinStats] = useState({
+    [Color.RED]: 0,
+    [Color.YELLOW]: 0 
+  })
 
 
   const reload = () => {
@@ -83,13 +87,14 @@ const useConnectFour = (color: Color) => {
 
     if (_winner !== Color.NONE) {
       setWinner(_winner)
+      setWinStats({...winStats, [_winner]: winStats[_winner] + 1})
     }
 
     setTurn(nextTurn)
   }
 
 
-  return {grid, turn, click, winner, reload}
+  return {grid, turn, click, winner, reload, winStats}
 }
 
 export default useConnectFour;
