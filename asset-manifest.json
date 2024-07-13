@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/connect-four/static/css/main.7f96c61c.css",
+    "main.js": "/connect-four/static/js/main.38daf99b.js",
+    "static/js/453.a0d61c50.chunk.js": "/connect-four/static/js/453.a0d61c50.chunk.js",
+    "index.html": "/connect-four/index.html",
+    "main.7f96c61c.css.map": "/connect-four/static/css/main.7f96c61c.css.map",
+    "main.38daf99b.js.map": "/connect-four/static/js/main.38daf99b.js.map",
+    "453.a0d61c50.chunk.js.map": "/connect-four/static/js/453.a0d61c50.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7f96c61c.css",
+    "static/js/main.38daf99b.js"
+  ]
+}
