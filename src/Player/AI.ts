@@ -7,16 +7,23 @@ interface MinMaxValue {
     move: number
 }
 
+const MAX_DEPTH = 3
+
 
 export const getBestMove = (grid: Color[][], forPlayer: Color): number => {
    return minimax(grid, forPlayer, forPlayer).move
 }
 
 
-const minimax = (grid: Color[][], forPlayer: Color,  playerToMove: Color): MinMaxValue => {
+const minimax = (grid: Color[][], forPlayer: Color,  playerToMove: Color, depth: number = 0): MinMaxValue => {
     const winner = getWinner(grid)
     if (winner !== Color.NONE) {
+        console.log(grid, forPlayer, playerToMove, score(winner, playerToMove))
         return {score: score(winner, playerToMove), move: -1}
+    }
+
+    if (depth > MAX_DEPTH) {
+        return {score: 0, move: -1}
     }
 
     const moves: number[] = []
@@ -28,7 +35,7 @@ const minimax = (grid: Color[][], forPlayer: Color,  playerToMove: Color): MinMa
         const possibleGame: Color[][] = getNextBoard(grid, move, playerToMove);
         const nextPlayer: Color = Color.RED === playerToMove ? Color.YELLOW : Color.RED
         moves.push(move)
-        scores.push(minimax(possibleGame, forPlayer, nextPlayer).score)
+        scores.push(minimax(possibleGame, forPlayer, nextPlayer, depth + 1).score)
     })
 
     if (forPlayer === playerToMove) {
@@ -57,7 +64,7 @@ const minimax = (grid: Color[][], forPlayer: Color,  playerToMove: Color): MinMa
 const getAvailableMoves = (grid: Color[][]): number[] => {
     const moves: number[] = []
     grid.forEach((column, columnIndex) => {
-        if (column.findIndex(i => i === Color.NONE)) {
+        if (column.includes(Color.NONE)) {
             moves.push(columnIndex)
         }
     })
@@ -78,11 +85,10 @@ const score = (winner: Color, forPlayer: Color): number => {
 const getWinner = (grid: Color[][]): Color => {
     let winner = Color.NONE
     for (let col = 0; col < grid.length; col++) {
-        for (let row = 0; row < grid[col].length; row++) {
-            winner = checkWin(grid, col, row);
-            if (winner !== Color.NONE) {
-                break;
-            }
+        const row = grid[col].findIndex(i => i !== Color.NONE)
+        winner = checkWin(grid, col, row);
+        if (winner !== Color.NONE) {
+            break;
         }
         if (winner !== Color.NONE) {
             break;

@@ -4,7 +4,7 @@ import { getBestMove } from '../Player/AI'
 import { checkWin, getNextBoard } from "../Game/API";
 
 
-const useConnectFour = (color: Color, withAI = false) => {
+const useConnectFour = (color: Color, withAI = true) => {
   const [grid, setGrid] = useState(Array.from({length: 7}, () => Array.from({length: 6}, () => Color.NONE)))
   const [turn, setTurn] = useState<Color>(color);
   const [winner, setWinner] = useState<Color>(Color.NONE);
@@ -12,7 +12,7 @@ const useConnectFour = (color: Color, withAI = false) => {
     [Color.RED]: 0,
     [Color.YELLOW]: 0 
   })
-
+  const aiColor = color === Color.RED ? Color.YELLOW : Color.RED;
 
   const reload = () => {
     setGrid(Array.from({length: 7}, () => Array.from({length: 6}, () => Color.NONE)))
@@ -21,7 +21,7 @@ const useConnectFour = (color: Color, withAI = false) => {
   }
 
 
-  const playTurn = (col: number) => {
+  const click = (col: number) => {
     let rowNumber: number = grid[col].findIndex(value => value === Color.NONE) - 1;
 
     if (rowNumber === -2) {
@@ -47,15 +47,12 @@ const useConnectFour = (color: Color, withAI = false) => {
     setTurn(nextTurn)
   }
 
-  const click = (col: number): void => {
-    playTurn(col)
-
-    if (withAI) {
-      const AiColor = color === Color.RED ? Color.YELLOW : Color.RED;
-      
-      playTurn(getBestMove(grid, AiColor))
+  useEffect(() => {
+    if (withAI && turn === aiColor) {
+      const bestMove = getBestMove(grid, aiColor)
+      setTimeout(() => click(bestMove), 200)
     }
-  }
+  }, [grid, turn, aiColor, withAI])
 
 
   return {grid, turn, click, winner, reload, winStats}
