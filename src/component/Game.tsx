@@ -1,22 +1,18 @@
 import useConnectFour from "../hooks/useConnectFour"
 import Color from "../types/Color"
 import Grid from "./Grid"
-import Winscreen from "./Winscreen"
 
 interface GameProps {
     firstPlayer: Color
 }
 
 const Game = ({firstPlayer}: GameProps) => {
-  const {grid, click, winner} = useConnectFour(firstPlayer)
-  
-  if (winner !== Color.NONE) {
-    return <Winscreen winner={winner} grid={grid} />
-  } 
+  const {grid, turn, click, winner} = useConnectFour(firstPlayer)
 
   return (
     <span className='h-screen flex flex-col justify-center items-center'>
-      <Grid grid={grid} click={click} />
+      {winner !== Color.NONE && <div>Winner is {winner}</div>}
+      <Grid grid={grid} turn={turn} click={click} />
     </span>
   )
 }

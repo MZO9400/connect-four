@@ -4,13 +4,18 @@ import Color from "../types/Color"
 
 interface GridProps {
     grid: Color[][]
-    click?: Function
+    turn: Color
+    click: Function
 }
 
-const Grid = ({grid, click}: GridProps) => {
+const Grid = ({grid, turn, click}: GridProps) => {
     const onCellClick = (col: number) => {
+        if (turn === Color.NONE) {
+            return;
+        }
+
         try {
-            click && click(col)
+            click(col)
         } catch (e) {
             console.error((e as Error).message)
         }
