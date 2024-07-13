@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Color from "../types/Color";
-import FilledRowException from '../exception/FilledRowException'
+import { getBestMove } from '../Player/AI'
+import { checkWin, getNextBoard } from "../Game/API";
 
 
-const useConnectFour = (color: Color) => {
+const useConnectFour = (color: Color, withAI = false) => {
   const [grid, setGrid] = useState(Array.from({length: 7}, () => Array.from({length: 6}, () => Color.NONE)))
   const [turn, setTurn] = useState<Color>(color);
   const [winner, setWinner] = useState<Color>(Color.NONE);
@@ -20,64 +21,17 @@ const useConnectFour = (color: Color) => {
   }
 
 
-  const checkWin = (column: number): Color => {
-    let rowNumber: number = grid[column].findIndex(value => value === Color.NONE) - 1
+  const playTurn = (col: number) => {
+    let rowNumber: number = grid[col].findIndex(value => value === Color.NONE) - 1;
 
     if (rowNumber === -2) {
-      rowNumber = grid[column].length - 1;
+        rowNumber = grid[col].length - 1;
     }
 
-    return lookupVictory(column, rowNumber) ? grid[column][rowNumber] : Color.NONE;
-  }
-
-  const hasConsecutive = (array: Color[], checkCount: number): boolean => {
-
-    return array.reduce((acc, i, ind) => {
-      const slice = array.slice(Math.max(ind - checkCount, 0), checkCount)
-      if (slice.length === checkCount && slice.every(value => value === i)) {
-        return true
-      }
-      return acc
-    }, false)
-  }
-
-  const lookupVictory = (column: number, row: number): boolean => {
-    const columnCheck = grid[column].slice(Math.max(row - 4, 0), 4);
-
-    const rowCheck: Color[] = []
-    const diagonalLeftCheck: Color[] = []
-    const diagonalRightCheck: Color[] = []
-    for (let i = column - 3; i <= column + 3; i++) {
-      const currentDiagonalDistance = Math.abs(column - i);
-      const rowNeg = row - currentDiagonalDistance
-      const rowPos = row + currentDiagonalDistance
-      try {
-        diagonalLeftCheck.push(grid[i][i <= 0 ? rowPos : rowNeg])
-      } catch (e) {}
-      try {
-        diagonalRightCheck.push(grid[i][i <= 0 ? rowNeg : rowPos])
-      } catch (e) {}
-      try {
-        rowCheck.push(grid[i][row]);
-      } catch (e) {}
-    }
-    if (hasConsecutive(columnCheck, 4) || hasConsecutive(rowCheck, 4) || hasConsecutive(diagonalLeftCheck, 4) || hasConsecutive(diagonalRightCheck, 4)) {
-      return true;
-    }
-
-    return false;
-  }
-
-  const click = (col: number): void => {
-    const newGrid = [...grid]
-    const rowNumber: number = grid[col].findIndex(value => value === Color.NONE)
-    if (rowNumber === -1) {
-      throw new FilledRowException(`Column ${col} has no empty rows`);
-    }
-    newGrid[col][rowNumber] = turn === Color.YELLOW ? Color.YELLOW : Color.RED;
+    const newGrid = getNextBoard(grid, col, turn)
     setGrid(newGrid)
 
-    const _winner: Color = checkWin(col);
+    const _winner: Color = checkWin(newGrid, col, rowNumber);
 
     const nextTurn = _winner !== Color.NONE ? 
           Color.NONE : 
@@ -91,6 +45,16 @@ const useConnectFour = (color: Color) => {
     }
 
     setTurn(nextTurn)
+  }
+
+  const click = (col: number): void => {
+    playTurn(col)
+
+    if (withAI) {
+      const AiColor = color === Color.RED ? Color.YELLOW : Color.RED;
+      
+      playTurn(getBestMove(grid, AiColor))
+    }
   }
 
 
