@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Color from "../types/Color";
 import { getBestMove } from '../Player/AI'
 import { checkWin, getNextBoard } from "../Game/API";
@@ -21,7 +21,7 @@ const useConnectFour = (color: Color, withAI = true) => {
   }
 
 
-  const click = (col: number) => {
+  const click = useCallback((col: number) => {
     let rowNumber: number = grid[col].findIndex(value => value === Color.NONE) - 1;
 
     if (rowNumber === -2) {
@@ -45,16 +45,16 @@ const useConnectFour = (color: Color, withAI = true) => {
     }
 
     setTurn(nextTurn)
-  }
+  }, [grid, turn, winStats])
 
   useEffect(() => {
-    if (withAI && turn === aiColor) {
+    if (withAI && turn === aiColor && winner === Color.NONE) {
       const bestMove = getBestMove(grid, aiColor)
       if (bestMove >= 0) {
         click(bestMove)
       }
     }
-  }, [grid, turn, aiColor, withAI])
+  }, [grid, turn, aiColor, winner, withAI, click])
 
 
   return {grid, turn, click, winner, reload, winStats}
