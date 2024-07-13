@@ -1,4 +1,4 @@
-import useGrid from "../hooks/useGrid"
+import useConnectFour from "../hooks/useConnectFour"
 import Color from "../types/Color"
 import Grid from "./Grid"
 import Winscreen from "./Winscreen"
@@ -8,7 +8,7 @@ interface GameProps {
 }
 
 const Game = ({firstPlayer}: GameProps) => {
-  const {grid, click, winner} = useGrid(firstPlayer)
+  const {grid, click, winner} = useConnectFour(firstPlayer)
   
   if (winner !== Color.NONE) {
     return <Winscreen winner={winner} grid={grid} />

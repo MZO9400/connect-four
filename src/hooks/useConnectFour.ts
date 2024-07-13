@@ -3,7 +3,7 @@ import Color from "../types/Color";
 import FilledRowException from '../exception/FilledRowException'
 
 
-const useGrid = (color: Color) => {
+const useConnectFour = (color: Color) => {
   const [grid, setGrid] = useState(Array.from({length: 7}, () => Array.from({length: 6}, () => Color.NONE)))
   const [turn, setTurn] = useState<Color>(color);
   const [winner, setWinner] = useState<Color>(Color.NONE);
@@ -85,4 +85,4 @@ const useGrid = (color: Color) => {
   return {grid, turn, click, winner}
 }
 
-export default useGrid;
+export default useConnectFour;
