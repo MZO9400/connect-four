@@ -20,7 +20,7 @@ const useConnectFour = (color: Color, withAI = false) => {
   }
 
 
-  const click = useCallback((col: number) => {
+  const playMove = useCallback((col: number) => {
     let rowNumber: number = grid[col].findIndex(value => value === Color.NONE) - 1;
 
     if (rowNumber === -2) {
@@ -46,6 +46,13 @@ const useConnectFour = (color: Color, withAI = false) => {
     setTurn(nextTurn)
   }, [grid, turn, winStats])
 
+    const click = useCallback((col: number) => {
+    if (withAI && color !== turn) {
+      return false;
+    }
+    playMove(col)
+  }, [color, playMove, turn, withAI])
+
   useEffect(() => {
     if (withAI && turn === aiColor && winner === Color.NONE) {
         const aiWorker = new Worker(new URL("../Player/AI.ts", import.meta.url))
@@ -53,12 +60,12 @@ const useConnectFour = (color: Color, withAI = false) => {
         aiWorker.onmessage = function (event) {
           const bestMove = event.data
           if (bestMove >= 0) {
-            click(bestMove)
+            playMove(bestMove)
             aiWorker.terminate()
           }
         };
     }
-  }, [grid, turn, aiColor, winner, withAI, click])
+  }, [grid, turn, aiColor, winner, withAI, click, playMove])
 
 
   return {grid, turn, click, winner, reload, winStats}
