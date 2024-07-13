@@ -1,18 +1,22 @@
 import useGrid from "../hooks/useGrid"
 import Color from "../types/Color"
 import Grid from "./Grid"
+import Winscreen from "./Winscreen"
 
 interface GameProps {
     firstPlayer: Color
 }
 
 const Game = ({firstPlayer}: GameProps) => {
-  const {grid, turn, click, winner} = useGrid(firstPlayer)
+  const {grid, click, winner} = useGrid(firstPlayer)
+  
+  if (winner !== Color.NONE) {
+    return <Winscreen winner={winner} grid={grid} />
+  } 
 
   return (
     <span className='h-screen flex flex-col justify-center items-center'>
-      {winner !== Color.NONE && <div>Winner is {winner}</div>}
-      <Grid grid={grid} turn={turn} click={click} />
+      <Grid grid={grid} click={click} />
     </span>
   )
 }
