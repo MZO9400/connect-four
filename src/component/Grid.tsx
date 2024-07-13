@@ -13,7 +13,12 @@ const Grid = ({grid, turn, click}: GridProps) => {
         if (turn === Color.NONE) {
             return;
         }
-        click(col)
+
+        try {
+            click(col)
+        } catch (e) {
+            console.error((e as Error).message)
+        }
     }
 
     return (
