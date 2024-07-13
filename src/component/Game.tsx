@@ -13,7 +13,7 @@ const Game = ({firstPlayer}: GameProps) => {
                   winner === Color.RED  ? "bg-red-300" : "bg-yellow-600"
 
   return (
-    <span className={`h-screen flex flex-col justify-center items-center transition-all duration-1000 ${bgColor}`}>
+    <span className={`animate-fade h-screen flex flex-col justify-center items-center transition-all duration-1000 ${bgColor}`}>
       <Grid grid={grid} turn={turn} click={click} />
     </span>
   )
