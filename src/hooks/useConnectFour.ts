@@ -50,7 +50,9 @@ const useConnectFour = (color: Color, withAI = true) => {
   useEffect(() => {
     if (withAI && turn === aiColor) {
       const bestMove = getBestMove(grid, aiColor)
-      setTimeout(() => click(bestMove), 200)
+      if (bestMove >= 0) {
+        click(bestMove)
+      }
     }
   }, [grid, turn, aiColor, withAI])
 
