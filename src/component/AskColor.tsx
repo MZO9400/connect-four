@@ -6,7 +6,7 @@ interface AskColorProps {
 
 const AskColor = ({setColor}: AskColorProps) => {
     return (
-        <div className="h-screen flex flex-col justify-center items-center">
+        <div className="animate-fade h-screen flex flex-col justify-center items-center">
             <h3 className="mb-5 text-lg font-medium text-gray-900">What color is the first player?</h3>
             <ul className="grid w-full gap-6 md:grid-cols-2">
                 <li className="justify-self-center" onClick={() => setColor(Color.RED)}>
