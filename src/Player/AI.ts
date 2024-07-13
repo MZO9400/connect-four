@@ -29,7 +29,7 @@ const minimax = (grid: Color[][], forPlayer: Color,  playerToMove: Color, depth:
     const moves: number[] = []
     const scores: number[] = []
 
-    const availableMoves = getAvailableMoves(grid)
+    const availableMoves = getAvailableMoves(grid).sort((a, b) => 0.5 - Math.random())
 
     availableMoves.forEach(move => {
         const possibleGame: Color[][] = getNextBoard(grid, move, playerToMove);
