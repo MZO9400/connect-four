@@ -3,7 +3,7 @@ import Color from "../types/Color";
 import { checkWin, getNextBoard } from "../Game/API";
 
 
-const useConnectFour = (color: Color, withAI = true) => {
+const useConnectFour = (color: Color, withAI = false) => {
   const [grid, setGrid] = useState(Array.from({length: 7}, () => Array.from({length: 6}, () => Color.NONE)))
   const [turn, setTurn] = useState<Color>(color);
   const [winner, setWinner] = useState<Color>(Color.NONE);

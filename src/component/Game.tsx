@@ -4,10 +4,11 @@ import Grid from "./Grid"
 
 interface GameProps {
     firstPlayer: Color
+    ai: boolean
 }
 
-const Game = ({firstPlayer}: GameProps) => {
-  const {grid, turn, click, winner, reload} = useConnectFour(firstPlayer)
+const Game = ({firstPlayer, ai}: GameProps) => {
+  const {grid, turn, click, winner, reload} = useConnectFour(firstPlayer, ai)
 
   const bgColor = winner === Color.NONE ? "bg-white" : 
                   winner === Color.RED  ? "bg-red-300" : "bg-yellow-600"
